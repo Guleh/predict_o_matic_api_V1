@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  app:
+    restart: always
+    build: 
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./arq:/arq
+    command: sh -c "python manage.py runserver 0.0.0.0:8000"    
+    environment:
+      - DEBUG=1
+  celery:
+    restart: always
+    build: .
+    command: "celery -A arq.celery worker -l info"
+  celery-beat:
+    restart: always
+    build: .
+    command: "celery -A arq.celery beat -l info"
