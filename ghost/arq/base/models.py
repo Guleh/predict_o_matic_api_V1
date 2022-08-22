@@ -26,6 +26,7 @@ class Asset(models.Model):
     accuracy = models.FloatField(default=0)
     sentiment = models.FloatField(default=0)   
     isactive = models.BooleanField(default=True)
+    batch = models.CharField(max_length=2, default='A')
     last_updated = models.DateTimeField(auto_now=True)
     tags = models.ManyToManyField(Tag,null=True, blank=True)  
 

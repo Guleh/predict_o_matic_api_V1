@@ -11,8 +11,8 @@ from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 
-def get_forecast(timeframe):
-    assets = list(Asset.objects.filter(timeframe = timeframe, isactive = True))
+def get_forecast(timeframe, batch):
+    assets = list(Asset.objects.filter(timeframe = timeframe, isactive = True, batch = batch))
     for asset in assets:
         print(f'{asset.identifier} ====================================== STARTING')
         run(asset, timeframe)

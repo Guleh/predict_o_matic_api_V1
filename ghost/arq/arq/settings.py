@@ -149,20 +149,24 @@ from celery.schedules import crontab
 CELERY_BROKER_URL = 'redis://:aKhcRBL1SCpCGjv56W3u82gob3GVqwy4@redis-11821.c82.us-east-1-2.ec2.cloud.redislabs.com:11821'
 CELERY_TIMEZONE='UTC'
 CELERY_BEAT_SCHEDULE ={
-    'calculate_hourly':{
-        'task': 'base.tasks.calculate_hourly',
-        'schedule': crontab(minute="56")
+    'calculate_hourly_A':{
+        'task': 'base.tasks.calculate_hourly_A',
+        'schedule': crontab(minute="29")
     },
-    'calculate_daily':{
-        'task': 'base.tasks.calculate_hourly',
-        'schedule': crontab(minute="15", hour="0")
+    'calculate_hourly_B':{
+        'task': 'base.tasks.calculate_hourly_B',
+        'schedule': crontab(minute="30")
     },
-    'get_sentiment':{
-        'task': 'base.tasks.calculate_sentiment',
-        'schedule': crontab(minute="1", hour="*/6")
-    },
-    'tune_hyperparameters':{
-        'task': 'base.tasks.calculate_hyperparameters',
-        'schedule': crontab(minute="1", hour="1", day_of_week="3")
-    }
+    #'calculate_daily':{
+    #    'task': 'base.tasks.calculate_hourly',
+    #    'schedule': crontab(minute="15", hour="0")
+    #},
+    #'get_sentiment':{
+    #    'task': 'base.tasks.calculate_sentiment',
+    #    'schedule': crontab(minute="1", hour="*/6")
+    #},
+    #'tune_hyperparameters':{
+    #    'task': 'base.tasks.calculate_hyperparameters',
+    #    'schedule': crontab(minute="1", hour="1", day_of_week="3")
+    #}
 }
