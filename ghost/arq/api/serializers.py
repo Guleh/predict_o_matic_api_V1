@@ -6,16 +6,16 @@ class TagSerializer(serializers.ModelSerializer):
         model = Tag
         fields = '__all__'
 
-class AssetSerializer(serializers.ModelSerializer):
-    tags = TagSerializer(many=True)
-    class Meta:
-        model = Asset
-        fields = '__all__'
-
 class AlgorithmSerializer(serializers.ModelSerializer):
-    asset = AssetSerializer(many=False)
     class Meta:
         model = Algorithm
+        fields = '__all__'
+
+class AssetSerializer(serializers.ModelSerializer):
+    tags = TagSerializer(many=True)
+    models = AlgorithmSerializer(many=True)
+    class Meta:
+        model = Asset
         fields = '__all__'
 
 class StrategySerializer(serializers.ModelSerializer):

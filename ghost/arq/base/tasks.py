@@ -3,15 +3,8 @@ from base.ghost import get_forecast#, get_sentiment
 from base.optimizer import tune
 
 @shared_task
-def calculate_hourly_A():
-    return (get_forecast(timeframe = '1h', batch='A'))
-
-@shared_task
-def calculate_hourly_B():
-    return (get_forecast(timeframe = '1h', batch='B'))
-
-
-
+def calculate_hourly():
+    return (get_forecast(timeframe = '1h'))
 
 @shared_task
 def calculate_daily():

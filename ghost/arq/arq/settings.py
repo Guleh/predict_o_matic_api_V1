@@ -150,13 +150,9 @@ CELERY_BROKER_URL = 'redis://:aKhcRBL1SCpCGjv56W3u82gob3GVqwy4@redis-11821.c82.u
 CELERY_TIMEZONE='UTC'
 CELERY_BEAT_SCHEDULE ={
     'calculate_hourly_A':{
-        'task': 'base.tasks.calculate_hourly_A',
-        'schedule': crontab(minute="29")
-    },
-    'calculate_hourly_B':{
-        'task': 'base.tasks.calculate_hourly_B',
-        'schedule': crontab(minute="30")
-    },
+        'task': 'base.tasks.calculate_hourly',
+        'schedule': crontab(minute="1")
+    }
     #'calculate_daily':{
     #    'task': 'base.tasks.calculate_hourly',
     #    'schedule': crontab(minute="15", hour="0")

@@ -26,8 +26,8 @@ class Asset(models.Model):
     accuracy = models.FloatField(default=0)
     sentiment = models.FloatField(default=0)   
     isactive = models.BooleanField(default=True)
-    batch = models.CharField(max_length=2, default='A')
-    last_updated = models.DateTimeField(auto_now=True)
+    last_updated = models.DateTimeField(auto_now=True) 
+    candles = models.TextField(null=True, blank=True)
     tags = models.ManyToManyField(Tag,null=True, blank=True)  
 
     def __str__(self):
@@ -38,7 +38,7 @@ class Asset(models.Model):
 
 class Algorithm(models.Model):
     name = models.CharField(max_length=100)
-    asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
+    asset = models.ForeignKey(Asset, related_name='models', on_delete=models.CASCADE, null=True)
     criterion = models.CharField(max_length=100, default='entropy', null=True)
     max_depth = models.IntegerField(default=50 , null=True)
     n_estimators = models.IntegerField(default=200, null=True)

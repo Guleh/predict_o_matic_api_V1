@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from base.models import Asset
-from .serializers import AssetSerializer
+from base.models import Asset, Algorithm
+from .serializers import AssetSerializer, AlgorithmSerializer
 
 @api_view(['GET'])
 def getRoutes(request):
@@ -23,26 +23,18 @@ def getAsset(request, identifier):
     serializer = AssetSerializer(assets, many=False)
     return Response(serializer.data)
 
-'''
-@api_view(['POST'])
-def createAccount(request):
-    data = request.data
-    user = User(email = data['email'])
-    user.save()
-    account = Account(user = user, email = data['email'], mex_pk = data['mex_pk'], mex_sk = data['mex_sk'])
-    account.save()
-    serializer = AccountSerializer(account, many=False)
+@api_view(['GET']) 
+def getModels(request):
+    models = Algorithm.objects.all()
+    serializer = AlgorithmSerializer(models, many=True)
     return Response(serializer.data)
 
-@api_view(['GET'])
-def getAccounts(request):
-    accounts = Account.objects.all()
-    serializer = AccountSerializer(accounts, many=True)
+@api_view(['GET']) 
+def getModel(request, identifier):
+    asset = Asset.objects.get(identifier=identifier)
+    models = Algorithm.objects.filter(asset=asset)
+    serializer = AlgorithmSerializer(models, many=True)
     return Response(serializer.data)
 
-@api_view(['GET'])
-def getAccount(request, pk):
-    account = Account.objects.get(id=pk)
-    serializer = AccountSerializer(account, many=False)
-    return Response(serializer.data)
-'''
+    
+
