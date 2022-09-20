@@ -1,4 +1,4 @@
-from base.rate_service import get_history
+from base.rate_service import get_data
 from base.data_pipeline import prepare_features
 
 from base.models import Asset, Algorithm
@@ -32,7 +32,7 @@ def tune():
 
 
 def prepare_data(asset):     
-    data, rc = get_history(asset.symbol, asset.timeframe)
+    data, rc = get_data(asset.symbol, asset.timeframe)
     data = prepare_features(data, asset)
     x = data.drop(['dir', 'returns'], axis = 1).values
     y = data['dir'].values

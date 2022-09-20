@@ -1,4 +1,4 @@
-from base.rate_service import get_history
+from base.rate_service import get_data
 from base.data_pipeline import prepare_features
 from .models import Asset, Algorithm
 from sklearn.model_selection import train_test_split
@@ -20,7 +20,8 @@ def get_forecast(timeframe):
 
 def run(asset, timeframe):
     algos = list(Algorithm.objects.filter(asset = asset, isactive = True))
-    df = get_history(asset.symbol, timeframe)
+    df, raw_candles = get_data(asset.platformsymbol, asset.timeframe)
+    asset.candles = raw_candles.to_json(orient='records')
     data, cols = prepare_features(df, asset)
     last_candle = data.iloc[-1]
     lco = last_candle['open']

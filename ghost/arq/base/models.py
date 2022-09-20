@@ -13,6 +13,7 @@ class Tag(models.Model):
 
 class Asset(models.Model):
     symbol = models.CharField(max_length=15)
+    platformsymbol = models.CharField(max_length=15, null=True)
     timeframe = models.CharField(max_length=3, null=True)
     identifier = models.CharField(max_length=18, null=True)
     description = models.CharField(max_length=250, null=True)
