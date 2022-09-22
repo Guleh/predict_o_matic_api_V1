@@ -13,7 +13,7 @@ def getRoutes(request):
 
 @api_view(['GET'])
 def getAssets(request):
-    assets = Asset.objects.all() 
+    assets = Asset.objects.filter(isactive=True).order_by('name') 
     serializer = AssetSerializer(assets, many=True)
     return Response(serializer.data)
 

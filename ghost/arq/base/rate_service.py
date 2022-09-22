@@ -46,10 +46,12 @@ def make_request(endpoint, data):
     if response.status_code == 200:
         return response.json()
     else:
-        print(f'error while making {method} request to {endpoint}: {response.status_code}')
+        print(f'error while making request to {endpoint}: {response.status_code}')
         return None
 
 def get_historical_candles(symbol, timeframe):
+    print(symbol)
+    print(timeframe)
     data = dict()
     data['symbol'] = symbol
     data['partial'] = True

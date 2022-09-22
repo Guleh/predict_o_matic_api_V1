@@ -152,11 +152,11 @@ CELERY_BEAT_SCHEDULE ={
     'calculate_hourly_A':{
         'task': 'base.tasks.calculate_hourly',
         'schedule': crontab(minute="1")
-    }
-    #'calculate_daily':{
-    #    'task': 'base.tasks.calculate_hourly',
-    #    'schedule': crontab(minute="15", hour="0")
-    #},
+    },
+    'calculate_daily':{
+        'task': 'base.tasks.calculate_daily',
+        'schedule': crontab(minute="15", hour="0")
+    },
     #'get_sentiment':{
     #    'task': 'base.tasks.calculate_sentiment',
     #    'schedule': crontab(minute="1", hour="*/6")

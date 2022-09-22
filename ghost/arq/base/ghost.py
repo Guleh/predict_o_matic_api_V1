@@ -15,8 +15,11 @@ def get_forecast(timeframe):
     assets = list(Asset.objects.filter(timeframe = timeframe, isactive = True))
     for asset in assets:
         print(f'{asset.identifier} ====================================== STARTING')
-        run(asset, timeframe)
-        print(f'{asset.identifier} ====================================== DONE')
+        try:
+            run(asset, timeframe)
+            print(f'{asset.identifier} ====================================== DONE')
+        except:
+            print('====================================== ERROR')
 
 def run(asset, timeframe):
     algos = list(Algorithm.objects.filter(asset = asset, isactive = True))
@@ -66,27 +69,28 @@ def run(asset, timeframe):
     print(f'last prediction: {asset.current_prediction == actual_direction} (predicted: {asset.current_prediction} - actual: {actual_direction}')
     asset.last_prediction = asset.current_prediction
     asset.current_prediction = prediction
+    asset.prediction_term = datetime.now() + timedelta(hours=1)
     asset.save()
 
 def run_model(values, x_train, y_train, x_test, y_test, algorithm):
 
-    if algorithm.name == "RandomForestClassifier":
+    if algorithm.identifier == "RandomForestClassifier":
         classifier = RandomForestClassifier(criterion= algorithm.criterion, max_depth=algorithm.max_depth, n_estimators=algorithm.n_estimators, random_state=algorithm.random_state)
-    if algorithm.name == "ExtraTreesClassifier":
+    if algorithm.identifier == "ExtraTreesClassifier":
         classifier = ExtraTreesClassifier(criterion= algorithm.criterion, max_depth=algorithm.max_depth, n_estimators=algorithm.n_estimators, random_state=algorithm.random_state)
-    if algorithm.name == "AdaBoostClassifier":
+    if algorithm.identifier == "AdaBoostClassifier":
         classifier = AdaBoostClassifier(RandomForestClassifier(criterion=algorithm.criterion, max_depth=algorithm.max_depth, n_estimators=algorithm.n_estimators, random_state=algorithm.random_state))
-    if algorithm.name == "DecisionTreeClassifier":
+    if algorithm.identifier == "DecisionTreeClassifier":
         classifier = DecisionTreeClassifier(criterion=algorithm.criterion, splitter=algorithm.splitter, random_state=algorithm.random_state)
-    if algorithm.name == "DecisionTreeRegressor":
+    if algorithm.identifier == "DecisionTreeRegressor":
         classifier = DecisionTreeRegressor(random_state=algorithm.random_state)
-    if algorithm.name == "XGBClassifier":
+    if algorithm.identifier == "XGBClassifier":
         classifier = XGBClassifier(learning_rate=algorithm.learning_rate, max_depth=algorithm.max_depth, n_estimators=algorithm.n_estimators, use_label_encoder=False)    
-    if algorithm.name == "GradientBoostingClassifier":
+    if algorithm.identifier == "GradientBoostingClassifier":
         classifier = GradientBoostingClassifier(n_estimators=algorithm.n_estimators, learning_rate=algorithm.learning_rate, max_depth=algorithm.max_depth, random_state=algorithm.random_state)    
-    if algorithm.name == "BaggingClassifier":
+    if algorithm.identifier == "BaggingClassifier":
         classifier = BaggingClassifier(ExtraTreesClassifier(criterion=algorithm.criterion, max_depth=algorithm.max_depth, n_estimators=algorithm.n_estimators, random_state=algorithm.random_state), random_state=algorithm.random_state, n_estimators=algorithm.n_estimators)   
-    if algorithm.name == "BaggingRegressor":
+    if algorithm.identifier == "BaggingRegressor":
         classifier = BaggingRegressor(ExtraTreesClassifier(criterion=algorithm.criterion, max_depth=algorithm.max_depth, n_estimators=algorithm.n_estimators, random_state=algorithm.random_state), random_state=algorithm.random_state, n_estimators=algorithm.n_estimators) 
     
     classifier.fit(x_train, y_train)

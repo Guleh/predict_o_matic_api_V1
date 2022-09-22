@@ -27,18 +27,20 @@ class Asset(models.Model):
     accuracy = models.FloatField(default=0)
     sentiment = models.FloatField(default=0)   
     isactive = models.BooleanField(default=True)
+    prediction_term = models.DateTimeField(null=True) 
     last_updated = models.DateTimeField(auto_now=True) 
     candles = models.TextField(null=True, blank=True)
     tags = models.ManyToManyField(Tag,null=True, blank=True)  
 
     def __str__(self):
-        return f'{self.identifier}'
+        return f'{self.platformsymbol}'
 
 
 
 
 class Algorithm(models.Model):
-    name = models.CharField(max_length=100)
+    identifier = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, null=True)
     asset = models.ForeignKey(Asset, related_name='models', on_delete=models.CASCADE, null=True)
     criterion = models.CharField(max_length=100, default='entropy', null=True)
     max_depth = models.IntegerField(default=50 , null=True)
@@ -51,6 +53,7 @@ class Algorithm(models.Model):
     prediction = models.IntegerField(default=0)
     predictions_total = models.IntegerField(default=0)
     predictions_correct = models.IntegerField(default=0)
+    last_updated = models.DateTimeField(auto_now=True) 
 
     def __str__(self):
         return f'{self.asset} - {self.name}'
