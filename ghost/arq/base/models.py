@@ -18,6 +18,7 @@ class Asset(models.Model):
     identifier = models.CharField(max_length=18, null=True)
     description = models.CharField(max_length=250, null=True)
     name = models.CharField(max_length=50, null=True, blank=True)
+    cg_name = models.CharField(max_length=50, null=True, blank=True)
     last_prediction = models.IntegerField(default=0)
     current_prediction = models.IntegerField(default=0)
     ups = models.IntegerField(default=0)
