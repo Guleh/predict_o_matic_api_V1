@@ -5,7 +5,7 @@ RUN apt-get update -y
 RUN apt-get install gcc -y
 RUN pip install torch==1.11.0 --no-cache
 RUN pip install -r /requirements.txt --no-cache
-RUN pip install wsgi --no-cache
+RUN pip install uwsgi --no-cache
 RUN mkdir /arq
 COPY ./arq /arq
 WORKDIR /arq
