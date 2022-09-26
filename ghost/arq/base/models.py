@@ -30,11 +30,12 @@ class Asset(models.Model):
     isactive = models.BooleanField(default=True)
     prediction_term = models.DateTimeField(null=True) 
     last_updated = models.DateTimeField(auto_now=True) 
+    last_close = models.FloatField(default=0)
     candles = models.TextField(null=True, blank=True)
     tags = models.ManyToManyField(Tag,null=True, blank=True)  
 
     def __str__(self):
-        return f'{self.platformsymbol}'
+        return f'{self.identifier}'
 
 
 
@@ -55,6 +56,7 @@ class Algorithm(models.Model):
     predictions_total = models.IntegerField(default=0)
     predictions_correct = models.IntegerField(default=0)
     last_updated = models.DateTimeField(auto_now=True) 
+    last_tuning = models.DateTimeField(null=True) 
 
     def __str__(self):
         return f'{self.asset} - {self.name}'

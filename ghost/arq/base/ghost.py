@@ -70,6 +70,7 @@ def run(asset, timeframe):
     asset.last_prediction = asset.current_prediction
     asset.current_prediction = prediction
     asset.prediction_term = datetime.now() + timedelta(hours=1)
+    asset.last_close = last_candle['close']
     asset.save()
 
 def run_model(values, x_train, y_train, x_test, y_test, algorithm):
