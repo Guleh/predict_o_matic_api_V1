@@ -10,15 +10,13 @@ services:
       - SECRET_KEY=M_Vy#]Vd4dSje592K2rJXM55E
       - ALLOWED_HOSTS=127.0.0.1,localhost
       - DEBUG=0
-      - DB_PW=dtupOEs4SA!Z7jSXYTdTb
-      - DB_HOST=arqdb.cratkb3vsjdk.eu-west-3.rds.amazonaws.com
-      - B_PK=WZWyDV3jEFP6c-xnoNtYbkhK
-      - B_SK=E-wC7jcD65Bfy-4qnvbD4YWWTNET6cN_nARAAyP3io0re4ab
+      - DB_PW=dtupOEs4SAZ7jSXYTdTb
+      - DB_HOST=ghostdb.cratkb3vsjdk.eu-west-3.rds.amazonaws.com
     logging:
       driver: awslogs
       options:
         awslogs-region: eu-west-3
-        awslogs-group: arq-api-logger
+        awslogs-group: ghost-api-logger
   
   proxy:
     build:
@@ -33,7 +31,7 @@ services:
       driver: awslogs
       options:
         awslogs-region: eu-west-3
-        awslogs-group: arq-proxy-logger
+        awslogs-group: ghost-proxy-logger
 
   celery:
     restart: always
@@ -43,7 +41,7 @@ services:
       driver: awslogs
       options:
         awslogs-region: eu-west-3
-        awslogs-group: arq-celery-logger
+        awslogs-group: ghost-celery-logger
 
   celery-beat:
     restart: always
