@@ -32,6 +32,7 @@ class Asset(models.Model):
     last_updated = models.DateTimeField(auto_now=True) 
     last_close = models.FloatField(default=0)
     candles = models.TextField(null=True, blank=True) 
+    tags = models.ManyToManyField(Tag,null=True, blank=True) 
 
     def __str__(self):
         return f'{self.identifier}'
