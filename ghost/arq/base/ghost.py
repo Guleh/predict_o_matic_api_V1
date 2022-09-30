@@ -1,6 +1,6 @@
 from base.rate_service import get_data
 from base.data_pipeline import prepare_features
-from .models import Asset, Algorithm
+from .models import Asset, Algorithm, HitratioHistory
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
@@ -71,7 +71,9 @@ def run(asset, timeframe):
     asset.current_prediction = prediction
     asset.prediction_term = datetime.now() + timedelta(hours=1)
     asset.last_close = last_candle['close']
+    hitratio = HitratioHistory(hitratio = asset.predictions/asset.predictions_correct, asset = asset)
     asset.save()
+    hitratio.save()
 
 def run_model(values, x_train, y_train, x_test, y_test, algorithm):
 

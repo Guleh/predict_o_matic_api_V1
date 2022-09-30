@@ -31,8 +31,7 @@ class Asset(models.Model):
     prediction_term = models.DateTimeField(null=True) 
     last_updated = models.DateTimeField(auto_now=True) 
     last_close = models.FloatField(default=0)
-    candles = models.TextField(null=True, blank=True)
-    tags = models.ManyToManyField(Tag,null=True, blank=True)  
+    candles = models.TextField(null=True, blank=True) 
 
     def __str__(self):
         return f'{self.identifier}'
@@ -75,5 +74,8 @@ class Strategy(models.Model):
     class Meta:
         verbose_name_plural = "Strategies"
 
+class HitratioHistory(models.Model):
+    hitratio = models.IntegerField(null=True)
+    asset = models.ForeignKey(Asset, related_name='hitratio', on_delete=models.CASCADE, null=True)
 
 
