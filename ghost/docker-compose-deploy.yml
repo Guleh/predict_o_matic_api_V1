@@ -8,7 +8,7 @@ services:
       - static_data:/vol/web
     environment:
       - SECRET_KEY=M_Vy#]Vd4dSje592K2rJXM55E
-      - ALLOWED_HOSTS=127.0.0.1,localhost
+      - ALLOWED_HOSTS=127.0.0.1,localhost,13.39.21.161
       - DEBUG=0
       - DB_PW=dtupOEs4SAZ7jSXYTdTb
       - DB_HOST=ghostdb.cratkb3vsjdk.eu-west-3.rds.amazonaws.com
