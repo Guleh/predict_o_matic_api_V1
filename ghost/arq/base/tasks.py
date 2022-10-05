@@ -7,6 +7,10 @@ def calculate_hourly():
     return (get_forecast(timeframe = '1h'))
 
 @shared_task
+def calculate_hourly():
+    return (get_forecast(timeframe = '4h'))
+
+@shared_task
 def calculate_daily():
     return (get_forecast(timeframe = '1d'))
 

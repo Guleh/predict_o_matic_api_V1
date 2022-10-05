@@ -26,46 +26,45 @@ def get_historical_candles(symbol, timeframe):
     print(symbol)
     print(timeframe)
     temptimeframe = None
-    if timeframe == '4h':
+    if timeframe != '1h' or timeframe != '1d':
+        temptimeframe = timeframe
+        tf = int(timeframe[0:1])
         timeframe = '1h'
-        temptimeframe = '4h'
     raw_candles = make_request(symbol, timeframe)   
     if raw_candles is not None:
         raw_candles.reverse()
         df = pd.DataFrame.from_dict(raw_candles)    
     df['timestamp'] = pd.to_datetime(df.iloc[:,0])        
-    df = df[['timestamp', 'open', 'high', 'low', 'close', 'volume', "vwap", "turnover"]]
+    df = df[['timestamp', 'open', 'high', 'low', 'close', 'volume', "vwap", 
+                      "turnover"]]
     if temptimeframe:
         rows = []
         for ind in df.index:
             div = str(df['timestamp'][ind])[10:13]           
-            if int(div)%4 == 0:
-                if ind+3 < len(df):
-                    highs = [int(df['high'][ind]), 
-                             int(df['high'][ind+1]), 
-                             int(df['high'][ind+2]), 
-                             int(df['high'][ind+3])]
-                    lows = [int(df['low'][ind]), 
-                            int(df['low'][ind+1]), 
-                            int(df['low'][ind+2]), 
-                            int(df['low'][ind+3])]
-                    vol = [int(df['volume'][ind]), 
-                            int(df['volume'][ind+1]), 
-                            int(df['volume'][ind+2]), 
-                            int(df['volume'][ind+3])]
-                    vwap = mean([(df['vwap'][ind]), 
-                            (df['vwap'][ind+1]), 
-                            (df['vwap'][ind+2]), 
-                            (df['vwap'][ind+3])])
-                    turnover = sum([(df['turnover'][ind]), 
-                            (df['turnover'][ind+1]), 
-                            (df['turnover'][ind+2]), 
-                            (df['turnover'][ind+3])])
-                    close = df['close'][ind+3]
-                    close = df['close'][ind+3]
+            if int(div)%tf == 0:
+                if ind+tf-1 < len(df):
+                    highs = []
+                    for i in range(0,tf):
+                        highs.append(float(df['high'][ind+i]))
+                    lows = []
+                    for i in range(0,tf):
+                        lows.append(float(df['low'][ind+i]))    
+                    vol = []
+                    for i in range(0,tf):
+                        vol.append(float(df['volume'][ind+i])) 
+                    vw = []
+                    for i in range(0,tf):
+                        vw.append(df['vwap'][ind+i])
+                    to = []
+                    for i in range(0,tf):
+                        to.append(df['turnover'][ind+i])
+                    
+                    close = df['close'][ind+tf-1]
                     high = max(highs)
                     low = min(lows)
-                    volume = sum(vol)
+                    volume = sum(vol)  
+                    vwap = mean(vw)  
+                    turnover = sum(to)
                     row = {
                             'timestamp':(df['timestamp'][ind]), 
                             'open':df['open'][ind],
