@@ -20,6 +20,8 @@ ALLOWED_HOSTS_ENV = os.environ.get('ALLOWED_HOSTS')
 if ALLOWED_HOSTS_ENV:
     ALLOWED_HOSTS.extend(ALLOWED_HOSTS_ENV.split(','))
 
+BEARER_TOKEN = os.environ.get("TWITTER_BEARER_TOKEN")
+
 
 # Application definition
 
@@ -161,9 +163,10 @@ CELERY_BEAT_SCHEDULE ={
         'task': 'base.tasks.calculate_daily',
         'schedule': crontab(minute="4", hour="0")
     },
-    #'get_sentiment':{
-    #    'task': 'base.tasks.calculate_sentiment',
-    #    'schedule': crontab(minute="1", hour="*/6")
+    'get_sentiment':{
+        'task': 'base.tasks.calculate_sentiment',
+        'schedule': crontab(minute="20", hour="*/6")
+    }
     #},
     #'tune_hyperparameters':{
     #    'task': 'base.tasks.calculate_hyperparameters',

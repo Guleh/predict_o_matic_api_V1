@@ -1,5 +1,5 @@
 from celery import shared_task
-from base.ghost import get_forecast#, get_sentiment
+from base.ghost import get_forecast, get_sentiment
 from base.optimizer import tune
 
 @shared_task
@@ -20,8 +20,7 @@ def calculate_daily():
 
 @shared_task
 def calculate_sentiment():
-    pass
-    #return(get_sentiment())
+    return(get_sentiment())
 
 @shared_task
 def calculate_hyperparameters():
