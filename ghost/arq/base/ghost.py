@@ -11,6 +11,9 @@ from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 import time
+from django.conf import settings
+from arq.settings import BEARER_TOKEN
+import flair
 
 def get_forecast(timeframe):
     time.sleep(10)
@@ -105,29 +108,48 @@ def run_model(values, x_train, y_train, x_test, y_test, algorithm):
     return int(pred), ac
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+BEARER_TOKEN = settings.BEARER_TOKEN
 
 def get_sentiment():
-    print(f'GETTING SENTIMENTAL **************************')
+    try:
+        assets = list(Asset.objects.filter(timeframe = '1h', isactive = True).distinct())
+        for asset in assets:            
+            try:
+                ticker = f'({asset.platformsymbol} OR {asset.name}) (lang:en)' 
+                headers = {'authorization': f'Bearer {BEARER_TOKEN}'}
+                params = {'query':ticker,
+                        'tweet.fields':'created_at,lang', 
+                        'max_results':'100'}
+                time = datetime.now() - timedelta(seconds = 15)
+                timeformat = '%Y-%m-%dT%H:%M:%SZ'
+                df = pd.DataFrame()
+                for hour in range(24 -1):
+                    pre60 = time - timedelta(minutes=60)
+                    params['end_time'] = time.strftime(timeformat)
+                    params['start_time'] = pre60.strftime(timeformat)
+                    response = requests.get(f'https://api.twitter.com/2/tweets/search/recent', headers = headers, params = params)
+                    time = pre60
+                    print(response)
+                    data = pd.DataFrame(response.json()['data'])    
+                    df = pd.concat([df, data])
+                    print('here')
+                sentiment_model = flair.models.TextClassifier.load("en-sentiment")
+                sentiment = 0
+                confidence = 0
+                values = df['text'].to_list()
+                for tweet in values:
+                    sentence = flair.data.Sentence(tweet)
+                    sentiment_model.predict(sentence)
+                    if sentence.labels[0].value == 'POSITIVE':
+                        sentiment += 1
+                    confidence += (sentence.labels[0].score)
+                score = sentiment/len(values)
+                save_assets = list(Asset.objects.filter(isactive = True, symbol = asset.name))
+                for s in save_assets:
+                    s.sentiment = score
+                    s.save()
+                print(f'sentiment calculation for {asset.name}: {score}')
+            except:
+                print(f'failed to get sentiment for {asset.name}')
+    except:
+        print(f'failed to get sentiments')
