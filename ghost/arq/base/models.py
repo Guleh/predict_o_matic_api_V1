@@ -80,6 +80,9 @@ class HitratioHistory(models.Model):
     asset = models.ForeignKey(Asset, related_name='hitratios', on_delete=models.CASCADE, null=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
 
+    def __str__(self):
+        return f'{self.asset} {self.asset.timeframe} : {self.created}'
+
     class Meta:
         verbose_name_plural = "hitratiohistories"
 
