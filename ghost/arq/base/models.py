@@ -78,5 +78,9 @@ class Strategy(models.Model):
 class HitratioHistory(models.Model):
     hitratio = models.IntegerField(null=True)
     asset = models.ForeignKey(Asset, related_name='hitratios', on_delete=models.CASCADE, null=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "hitratiohistories"
 
 
