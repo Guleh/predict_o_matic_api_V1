@@ -14,9 +14,10 @@ import time
 from django.conf import settings
 from arq.settings import BEARER_TOKEN
 import flair
+import requests
 
 def get_forecast(timeframe):
-    time.sleep(10)
+    time.sleep(30)
     assets = list(Asset.objects.filter(timeframe = timeframe, isactive = True))
     for asset in assets:
         print(f'{asset.identifier} ====================================== STARTING')
@@ -108,13 +109,14 @@ def run_model(values, x_train, y_train, x_test, y_test, algorithm):
     return int(pred), ac
 
 
-BEARER_TOKEN = settings.BEARER_TOKEN
+BEARER_TOKEN = 'AAAAAAAAAAAAAAAAAAAAADLHbgEAAAAAAZYnS0TNsa8uGjeUoqNUWFwiDk4%3DRG4OmBA6yT8LOI3UOh1mZpConthcxY2nJthBnUytbjKwwJRFrp'
 
 def get_sentiment():
     try:
         assets = list(Asset.objects.filter(timeframe = '1h', isactive = True).distinct())
-        for asset in assets:            
+        for asset in assets:
             try:
+                print(f'running {asset.name} sentiment analysis')
                 ticker = f'({asset.platformsymbol} OR {asset.name}) (lang:en)' 
                 headers = {'authorization': f'Bearer {BEARER_TOKEN}'}
                 params = {'query':ticker,
@@ -129,10 +131,9 @@ def get_sentiment():
                     params['start_time'] = pre60.strftime(timeformat)
                     response = requests.get(f'https://api.twitter.com/2/tweets/search/recent', headers = headers, params = params)
                     time = pre60
-                    print(response)
                     data = pd.DataFrame(response.json()['data'])    
                     df = pd.concat([df, data])
-                    print('here')
+                print(f'downloaded tweets for {asset.name} sentiment analysis')
                 sentiment_model = flair.models.TextClassifier.load("en-sentiment")
                 sentiment = 0
                 confidence = 0
@@ -143,13 +144,15 @@ def get_sentiment():
                     if sentence.labels[0].value == 'POSITIVE':
                         sentiment += 1
                     confidence += (sentence.labels[0].score)
+                print("tweet loop done for {asset.name}")
                 score = sentiment/len(values)
-                save_assets = list(Asset.objects.filter(isactive = True, symbol = asset.name))
+                save_assets = list(Asset.objects.filter(isactive = True, name = asset.name))
                 for s in save_assets:
                     s.sentiment = score
                     s.save()
                 print(f'sentiment calculation for {asset.name}: {score}')
-            except:
+            except Exception as e:
+                print(e)
                 print(f'failed to get sentiment for {asset.name}')
     except:
         print(f'failed to get sentiments')
