@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from base.models import Asset, Algorithm
+from base.models import Asset, Algorithm, HitratioHistory
 from .serializers import AssetSerializer, AlgorithmSerializer
 
 @api_view(['GET'])
@@ -33,6 +33,7 @@ def getModels(request):
 def getModel(request, identifier):
     asset = Asset.objects.get(identifier=identifier)
     models = Algorithm.objects.filter(asset=asset)
+    models = HitratioHistory.objects.filter(asset=asset)
     serializer = AlgorithmSerializer(models, many=True)
     return Response(serializer.data)
 
