@@ -33,7 +33,7 @@ def getModels(request):
 def getModel(request, identifier):
     asset = Asset.objects.get(identifier=identifier)
     models = Algorithm.objects.filter(asset=asset)
-    models = HitratioHistory.objects.filter(asset=asset)
+    hitratios = HitratioHistory.objects.filter(asset=asset)
     serializer = AlgorithmSerializer(models, many=True)
     return Response(serializer.data)
 
