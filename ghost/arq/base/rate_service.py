@@ -1,19 +1,15 @@
-from binance.client import Client
 import time
-import hmac
-import hashlib
 import requests
-from urllib.parse import urlencode
 import datetime
 import json
 import pandas as pd
 import numpy as np
 import os
+from statistics import mean
 
 def make_request(symbol, timeframe):
     try:
         response = requests.get(f'https://www.bitmex.com/api/v1/trade/bucketed?binSize={timeframe}&partial=true&symbol={symbol}&count=1000&reverse=true')
-        print(response)
     except Exception as e:
         print(f'connection error while making request: {e}')
     if response.status_code == 200:
@@ -37,7 +33,7 @@ def get_historical_candles(symbol, timeframe):
     df['timestamp'] = pd.to_datetime(df.iloc[:,0])        
     df = df[['timestamp', 'open', 'high', 'low', 'close', 'volume', "vwap", 
                       "turnover"]]
-    if temptimeframe:
+    if temptimeframe != None:
         rows = []
         for ind in df.index:
             div = str(df['timestamp'][ind])[10:13]           
@@ -58,7 +54,6 @@ def get_historical_candles(symbol, timeframe):
                     to = []
                     for i in range(0,tf):
                         to.append(df['turnover'][ind+i])
-                    
                     close = df['close'][ind+tf-1]
                     high = max(highs)
                     low = min(lows)
