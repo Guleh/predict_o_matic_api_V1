@@ -149,9 +149,13 @@ from celery.schedules import crontab
 CELERY_BROKER_URL = 'redis://:aKhcRBL1SCpCGjv56W3u82gob3GVqwy4@redis-11821.c82.us-east-1-2.ec2.cloud.redislabs.com:11821'
 CELERY_TIMEZONE='UTC'
 CELERY_BEAT_SCHEDULE ={
-    'calculate_hourly_A':{
+    'calculate_hourly':{
         'task': 'base.tasks.calculate_hourly',
         'schedule': crontab(minute="0")
+    },
+    'calculate_four_hourly':{
+        'task': 'base.tasks.calculate_four_hourly',
+        'schedule': crontab(minute="2", hour="*/4")
     },
     'calculate_daily':{
         'task': 'base.tasks.calculate_daily',
