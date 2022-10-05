@@ -151,11 +151,11 @@ CELERY_TIMEZONE='UTC'
 CELERY_BEAT_SCHEDULE ={
     'calculate_hourly_A':{
         'task': 'base.tasks.calculate_hourly',
-        'schedule': crontab(minute="1")
+        'schedule': crontab(minute="0")
     },
     'calculate_daily':{
         'task': 'base.tasks.calculate_daily',
-        'schedule': crontab(minute="15", hour="0")
+        'schedule': crontab(minute="4", hour="0")
     },
     #'get_sentiment':{
     #    'task': 'base.tasks.calculate_sentiment',

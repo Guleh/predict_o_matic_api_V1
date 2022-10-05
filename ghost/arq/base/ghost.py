@@ -10,8 +10,10 @@ from sklearn.ensemble import BaggingClassifier, GradientBoostingClassifier, Grad
 from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+import time
 
 def get_forecast(timeframe):
+    time.sleep(10)
     assets = list(Asset.objects.filter(timeframe = timeframe, isactive = True))
     for asset in assets:
         print(f'{asset.identifier} ====================================== STARTING')
@@ -71,9 +73,9 @@ def run(asset, timeframe):
     asset.current_prediction = prediction
     asset.prediction_term = datetime.now() + timedelta(hours=1)
     asset.last_close = last_candle['close']
-    hitratio = HitratioHistory(hitratio = asset.predictions/asset.predictions_correct, asset = asset)
     asset.save()
-    hitratio.save()
+   # hitratio = HitratioHistory(hitratio = asset.predictions/asset.predictions_correct, asset = asset)
+   # hitratio.save()
 
 def run_model(values, x_train, y_train, x_test, y_test, algorithm):
 
