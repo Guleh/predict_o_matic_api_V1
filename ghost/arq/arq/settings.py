@@ -165,7 +165,7 @@ CELERY_BEAT_SCHEDULE ={
     },
     'get_sentiment':{
         'task': 'base.tasks.calculate_sentiment',
-        'schedule': crontab(minute="30" hour="0")
+        'schedule': crontab(minute="30", hour="0")
     }
     #,
     #'tune_hyperparameters':{
