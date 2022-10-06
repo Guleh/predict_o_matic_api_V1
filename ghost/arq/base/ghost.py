@@ -77,7 +77,7 @@ def run(asset, timeframe):
     asset.current_prediction = prediction
     asset.prediction_term = datetime.now() + timedelta(hours=1)
     asset.last_close = last_candle['close']
-    hitratio = asset.predictions_total/asset.predictions_correct
+    hitratio = asset.predictions_correct/asset.predictions_total
     asset.save()
     hitratio = HitratioHistory.objects.create(hitratio = hitratio, asset = asset)
 
