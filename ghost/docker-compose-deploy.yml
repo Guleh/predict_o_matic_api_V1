@@ -36,7 +36,7 @@ services:
   celery:
     restart: always
     build: .
-    command: "celery -A arq.celery worker -l info"
+    command: "celery -A arq.celery worker -l info -c 3"
     logging:
       driver: awslogs
       options:
@@ -47,6 +47,11 @@ services:
     restart: always
     build: .
     command: "celery -A arq.celery beat -l info"
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: eu-west-3
+        awslogs-group: ghost-beat-logger
 
 volumes:
   static_data:

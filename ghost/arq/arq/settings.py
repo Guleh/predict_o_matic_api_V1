@@ -145,10 +145,11 @@ MEDIA_ROOT = '/vol/web/media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+
 # CELERY
 from celery.schedules import crontab
 #redis://:password@hostname:port/db_number
-CELERY_BROKER_URL = 'redis://:aKhcRBL1SCpCGjv56W3u82gob3GVqwy4@redis-11821.c82.us-east-1-2.ec2.cloud.redislabs.com:11821'
+CELERY_BROKER_URL = 'redis://:ZPGJnNCmEvA5H8HmSq0tS9KbCSGr61XG@redis-11619.c281.us-east-1-2.ec2.cloud.redislabs.com:11619'
 CELERY_TIMEZONE='UTC'
 CELERY_BEAT_SCHEDULE ={
     'calculate_hourly':{
@@ -159,6 +160,7 @@ CELERY_BEAT_SCHEDULE ={
         'task': 'base.tasks.calculate_four_hourly',
         'schedule': crontab(minute="2", hour="*/4")
     },
+
     'calculate_daily':{
         'task': 'base.tasks.calculate_daily',
         'schedule': crontab(minute="4", hour="0")
@@ -167,9 +169,10 @@ CELERY_BEAT_SCHEDULE ={
         'task': 'base.tasks.calculate_sentiment',
         'schedule': crontab(minute="30", hour="0")
     }
+}
     #,
     #'tune_hyperparameters':{
     #    'task': 'base.tasks.calculate_hyperparameters',
     #    'schedule': crontab(minute="1", hour="1", day_of_week="3")
     #}
-}
+
