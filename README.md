@@ -1,6 +1,6 @@
 # PredictOMatic
 
-This is the first version of the predict_o_matic API. The current version is private.<br>
+This is the first version of the predict-o-matic API. The current version is private.<br>
 Predict-o-matic is a project which tries to generate predictions for the crypto currency market.
 These predictions are made using self-optimizing machine learning algorithms.<br>
 This API is created using Django. <br> Machine learning, data analysis and sentiment analysis is done using Pandas, 
